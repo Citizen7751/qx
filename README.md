@@ -4,7 +4,7 @@ It's a simple tool that turns system commands into clickable shortcuts and thus 
 
 //screenshot
 
-Configurable parts in ```qx.cpp``` are ```def_cc```, ```ofile_flag``` and ```make_flags```. If you want to change the C compiler it should use, or the flags, modify these. The default configuration is for GCC.
+Configurable parts in ```qx.cpp``` are ```def_qx_cc```, ```def_qx_ofile_flag``` and ```def_qx_make_flags```. If you want to change the C compiler it should use, or the flags, modify these. The default configuration is for GCC.
 
 ---
 
