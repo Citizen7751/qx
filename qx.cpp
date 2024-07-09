@@ -16,7 +16,6 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 */
 
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -45,6 +44,7 @@ const str def_qx_ofile_flag = "-o";
 const str def_qx_make_flags = "-s -O3";
 // -------------------------------------------------------
 // -------------------------------------------------------
+
 
 void print_copyright_notice() {
     std::cout << "QX Copyright (C) 2024 Citizen7751\nThis program comes with ABSOLUTELY NO WARRANTY.\n\n";
