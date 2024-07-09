@@ -1,6 +1,6 @@
 /*
 -------------------------- License - GPLv3 ------------------------------
-qx - Quick Execution
+QX - Quick Execution
 Copyright (C) 2024 Citizen7751 <https://github.com/Citizen7751>
 
 This program is free software: you can redistribute it and/or modify it
@@ -37,14 +37,18 @@ typedef std::string str;
 
 
 // -------------------------------------------------------
-// ------------------ Configurable Part ------------------
+// -------------------- Editable Part --------------------
 // default C compiler & flags used to create the binaries
+// feel free to change them
 const str def_qx_cc = "gcc";
 const str def_qx_ofile_flag = "-o";
 const str def_qx_make_flags = "-s -O3";
 // -------------------------------------------------------
 // -------------------------------------------------------
 
+void print_copyright_notice() {
+    std::cout << "QX Copyright (C) 2024 Citizen7751\nThis program comes with ABSOLUTELY NO WARRANTY.\n\n";
+}
 
 void get_commands(std::vector<str>& commands) {
     str buff;
@@ -112,6 +116,8 @@ int create_exe(str& make_command) {
 }
 
 int main(void) {
+    print_copyright_notice();
+
     str qxfile_name, qxfile_src, qxfile_exe, qxfile_make_command;
     std::vector<str> exe_commands;
 
