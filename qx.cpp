@@ -37,9 +37,8 @@ typedef std::string str;
 
 
 // -------------------------------------------------------
-// -------------------- Editable Part --------------------
+// ------------------ Configurable Part ------------------
 // default C compiler & flags used to create the binaries
-// feel free to change them
 const str def_qx_cc = "gcc";
 const str def_qx_ofile_flag = "-o";
 const str def_qx_make_flags = "-s -O3";
