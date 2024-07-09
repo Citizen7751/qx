@@ -3,7 +3,8 @@
 It's a simple tool that turns system commands into clickable shortcuts and thus makes execution easier. After you've specified your executable's name and its commands, it will drop a C source file and its compiled version, so it can be executed right away. The reason you get the source file next to the executable is to be able to modify it later and recompile it.
 
 //screenshot
-//editable parts
+
+Configurable parts in ```qx.cpp``` are ```def_cc```, ```ofile_flag``` and ```make_flags```. If you want to change the C compiler it should use, or the flags, modify these. The default configuration is for GCC.
 
 ---
 
