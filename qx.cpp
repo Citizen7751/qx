@@ -40,9 +40,9 @@ typedef std::string str;
 // -------------------- Editable Part --------------------
 // default C compiler & flags used to create the binaries
 // feel free to change them
-const str def_cc = "gcc";
-const str ofile_flag = "-o";
-const str make_flags = "-s -O3";
+const str def_qx_cc = "gcc";
+const str def_qx_ofile_flag = "-o";
+const str def_qx_make_flags = "-s -O3";
 // -------------------------------------------------------
 // -------------------------------------------------------
 
@@ -121,7 +121,7 @@ int main(void) {
 
     qxfile_src = qxfile_name + ".c";
     qxfile_exe = qxfile_name + EXT;
-    qxfile_make_command = def_cc + " " + ofile_flag + " " + qxfile_exe + " " + qxfile_src + " " + make_flags;
+    qxfile_make_command = def_qx_cc + " " + def_qx_ofile_flag + " " + qxfile_exe + " " + qxfile_src + " " + def_qx_make_flags;
 
     create_src(qxfile_src, qxfile_make_command, exe_commands);
     if (!check_file(qxfile_src)) handle_error(qxfile_src);
