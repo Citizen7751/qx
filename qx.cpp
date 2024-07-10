@@ -103,13 +103,13 @@ namespace file_handling {
     }
 
     void creation_error(const str& fname) {
-        std::cout << RED "-> Could not create " DEF_COLOR << fname << RED "!" DEF_COLOR "\n";
+        std::cout << RED "[Could not create " DEF_COLOR << fname << RED "]" DEF_COLOR "\n";
         std::cin.get();
         exit(EXIT_FAILURE);
     }
 
     inline void file_already_exists(const str& fname) {
-        std::cout << RED "-> " DEF_COLOR << fname << RED " already exists! Try again." DEF_COLOR "\n";
+        std::cout << RED "[" DEF_COLOR << fname << RED " already exists] " GREY "Try again." DEF_COLOR "\n";
     }
 }
 
@@ -138,7 +138,7 @@ namespace create_file {
         cmdfile << "\tconst int length = sizeof(commands)/sizeof(commands[0]);\n";
         cmdfile << "\tfor (unsigned int i=0; i<length; i++)\n";
         cmdfile << "\t\tif (system(commands[i])) exe_error(commands[i], i+1);\n\n";
-        cmdfile << "\tprintf(\"" GREEN "Finished." DEF_COLOR "\");\n";
+        cmdfile << "\tprintf(\"" GREY "[Process finished]" DEF_COLOR "\");\n";
         cmdfile << "\twhile(getchar()!=\'\\n\');\n\treturn 0;\n}";
         cmdfile.close();
     }
@@ -195,10 +195,10 @@ int main(void) {
     if (create_file::exe(qxfile_make_command)) file_handling::creation_error(qxfile_exe);
     if (!file_handling::check_file(qxfile_exe)) file_handling::creation_error(qxfile_exe);
 
-    std::cout << GREEN "\n-> [" DEF_COLOR << qxfile_src
-              << GREEN "] and [" DEF_COLOR << qxfile_exe
-              << GREEN "] are created" DEF_COLOR
-              "\n\n<Press Enter to exit.>\n";
+    std::cout << GREEN "\n[" DEF_COLOR << qxfile_src
+              << GREEN " and " DEF_COLOR << qxfile_exe
+              << GREEN " are successfully created]" GREY
+              "\n[Press Enter to exit]" DEF_COLOR "\n";
 
     std::cin.get();
     ANSI_SEQ_OFF;
