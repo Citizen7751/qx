@@ -116,7 +116,7 @@ namespace file_handling {
 namespace create_file {
 
     void src(const str& qxfile_src, const str& qxfile_make_command, std::vector<str>& exe_commands) {
-        
+
         std::ofstream cmdfile(qxfile_src);
         if (!cmdfile.is_open()) file_handling::creation_error(qxfile_src);
         
@@ -197,7 +197,7 @@ int main(void) {
 
     std::cout << GREEN "\n-> [" DEF_COLOR << qxfile_src
               << GREEN "] and [" DEF_COLOR << qxfile_exe
-              << GREEN "] are successfully created." DEF_COLOR
+              << GREEN "] are created" DEF_COLOR
               "\n\n<Press Enter to exit.>\n";
 
     std::cin.get();
