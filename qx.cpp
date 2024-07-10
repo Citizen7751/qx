@@ -83,9 +83,9 @@ inline void print_copyright_notice() {
         DEF_COLOR;
 }
 
-str sanitize_str(const str& line) {
+str sanitize_str(const str& input) {
     str cleanstr;
-    for (auto c : line) {
+    for (auto c : input) {
         if (c == '\\' || c == '\"')
           cleanstr += '\\';
         cleanstr += c;
