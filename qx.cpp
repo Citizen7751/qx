@@ -60,7 +60,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #define RED         "\033[38;2;255;0;0m"
 #define GREEN       "\033[38;2;0;255;0m"
 #define WHITE       "\033[38;2;255;255;255m"
-#define GREY        "\033[38;2;150;150;150m"
+#define GREY        "\033[38;2;100;100;100m"
 #define DEF_COLOR   "\033[0m"
 
 typedef std::string str;
