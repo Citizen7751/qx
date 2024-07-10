@@ -138,7 +138,7 @@ namespace create_file {
         cmdfile << "\tconst int length = sizeof(commands)/sizeof(commands[0]);\n";
         cmdfile << "\tfor (unsigned int i=0; i<length; i++)\n";
         cmdfile << "\t\tif (system(commands[i])) exe_error(commands[i], i+1);\n\n";
-        cmdfile << "\tprintf(\"" GREY "[Process finished]" DEF_COLOR "\");\n";
+        cmdfile << "\tprintf(\"" GREY "[Process finished - press Enter to exit]" DEF_COLOR "\");\n";
         cmdfile << "\twhile(getchar()!=\'\\n\');\n\treturn 0;\n}";
         cmdfile.close();
     }
