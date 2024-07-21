@@ -120,14 +120,14 @@ namespace create_file {
         std::ofstream cmdfile(qxfile_src);
         if (!cmdfile.is_open()) file_handling::creation_error(qxfile_src);
         
-        cmdfile << "// ***** To recompile this ******\n//" << qxfile_make_command << "\n\n";
+        cmdfile << "// ***** To recompile this ******\n// " << qxfile_make_command << "\n\n";
         cmdfile << "#include <stdio.h>\n#include <stdlib.h>\n\n";
         cmdfile << "void exe_error(const char* command, const int line) {\n";
         cmdfile << "\tprintf(\"" RED "Error at line [" DEF_COLOR "%d" RED "]: " DEF_COLOR
             "\\\"%s\\\"" RED " Aborting." DEF_COLOR "\\n\", line, command);\n";
         cmdfile << "\twhile (getchar()!='\\n');\n\texit(1);\n}\n\n";
         cmdfile << "int main(void) {\n\n\n";
-        cmdfile << "\tconst char* commands[] ={\n";
+        cmdfile << "\tconst char* commands[] = {\n";
         
         for (auto line : exe_commands) {
             line = sanitize_str(line);
