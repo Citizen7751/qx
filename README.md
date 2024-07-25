@@ -12,12 +12,12 @@ Configurable parts in ```qx.cpp``` are ```def_qx_cc```, ```def_qx_ofile_flag``` 
 
 **Windows**
 ```
-g++ -o qx.exe qx.cpp -s -O3
+> g++ -o .\qx.exe .\qx.cpp -s -O3
 ```
 
 **Linux**
 ```
-g++ -o qx qx.cpp -s -O3
+$ g++ -o ./qx ./qx.cpp -s -O3
 ```
 
 ---
