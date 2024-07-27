@@ -3,7 +3,7 @@
 QX - Quick Execution
 Copyright (C) 2024 Citizen7751
 
-<https://github.com/Citizen7751/QX>
+<https://github.com/Citizen7751/qx>
 
 This program is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
