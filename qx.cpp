@@ -30,6 +30,9 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
     #include <windows.h>
     #define EXT ".exe"
 
+    //enabling virtual terminal processing to use
+    //the ANSI esc sequences to color the command prompt on windows
+
     void enable_ansi_escseq() {
         HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
         DWORD dw_mode = 0;
@@ -63,15 +66,13 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #define GREY        "\033[38;2;100;100;100m"
 #define DEF_COLOR   "\033[0m"
 
-typedef std::string str;
-
 
 // -------------------------------------------------------
 // ------------------ Configurable Part ------------------
 // default C compiler & flags used to create the binaries
-const str def_qx_cc = "gcc";
-const str def_qx_ofile_flag = "-o";
-const str def_qx_make_flags = "-s -O3";
+const std::string def_qx_cc = "gcc";
+const std::string def_qx_ofile_flag = "-o";
+const std::string def_qx_make_flags = "-s -O3";
 // -------------------------------------------------------
 // -------------------------------------------------------
 
@@ -83,8 +84,8 @@ inline void print_copyright_notice() {
         DEF_COLOR;
 }
 
-str sanitize_str(const str& input) {
-    str cleanstr;
+std::string sanitize_str(const std::string& input) {
+    std::string cleanstr;
     for (auto c : input) {
         if (c == '\\' || c == '\"')
           cleanstr += '\\';
@@ -95,27 +96,27 @@ str sanitize_str(const str& input) {
 
 namespace file_handling {
 
-    bool check_file(const str& fname) {
+    bool check_file(const std::string& fname) {
         std::ifstream f(fname);
         bool success = f.good();
         f.close();
         return success;
     }
 
-    void creation_error(const str& fname) {
+    void creation_error(const std::string& fname) {
         std::cout << RED "[Could not create " DEF_COLOR << fname << RED "]" DEF_COLOR "\n";
         std::cin.get();
         exit(EXIT_FAILURE);
     }
 
-    inline void file_already_exists(const str& fname) {
+    inline void file_already_exists(const std::string& fname) {
         std::cout << RED "[" DEF_COLOR << fname << RED " already exists] " GREY "Try again." DEF_COLOR "\n";
     }
 }
 
 namespace create_file {
 
-    void src(const str& qxfile_src, const str& qxfile_make_command, std::vector<str>& exe_commands) {
+    void src(const std::string& qxfile_src, const std::string& qxfile_make_command, std::vector<std::string>& exe_commands) {
 
         std::ofstream cmdfile(qxfile_src);
         if (!cmdfile.is_open()) file_handling::creation_error(qxfile_src);
@@ -143,14 +144,14 @@ namespace create_file {
         cmdfile.close();
     }
 
-    int exe(const str& make_command) {
+    int exe(const std::string& make_command) {
         return system(make_command.c_str());
     }
 }
 
 namespace user_prompt {
 
-    void get_qx_file_name(str& qxfile_name, str& qxfile_src, str& qxfile_exe, str& qxfile_make_command) {
+    void get_qx_file_name(std::string& qxfile_name, std::string& qxfile_src, std::string& qxfile_exe, std::string& qxfile_make_command) {
         do {
             std::cout << WHITE "\nExecutable name: " DEF_COLOR;
             std::getline(std::cin, qxfile_name);
@@ -165,9 +166,9 @@ namespace user_prompt {
         } while (file_handling::check_file(qxfile_src) || file_handling::check_file(qxfile_exe));
     }
 
-    void get_commands(std::vector<str>& commands) {
+    void get_commands(std::vector<std::string>& commands) {
         std::cout << WHITE "Commands:\n" DEF_COLOR;
-        str buff;
+        std::string buff;
         unsigned int line = 1;
         do {
             std::cout << '[' << line << "]> ";
@@ -183,8 +184,8 @@ int main(void) {
     ANSI_SEQ_ON;
     print_copyright_notice();
 
-    str qxfile_name, qxfile_src, qxfile_exe, qxfile_make_command;
-    std::vector<str> exe_commands;
+    std::string qxfile_name, qxfile_src, qxfile_exe, qxfile_make_command;
+    std::vector<std::string> exe_commands;
 
     user_prompt::get_qx_file_name(qxfile_name, qxfile_src, qxfile_exe, qxfile_make_command);
     user_prompt::get_commands(exe_commands);
