@@ -127,8 +127,11 @@ namespace file_handling {
 
 namespace create_file {
 
-    void src(const std::string& qxfile_src, const std::string& qxfile_make_command, std::vector<std::string>& exe_commands) {
-
+    void src(
+        const std::string& qxfile_src,
+        const std::string& qxfile_make_command,
+        std::vector<std::string>& exe_commands)
+    {
         std::ofstream cmdfile(qxfile_src);
         if (!cmdfile.is_open()) file_handling::creation_error(qxfile_src);
         
@@ -165,7 +168,12 @@ namespace create_file {
 
 namespace user_prompt {
 
-    void get_qx_file_name(std::string& qxfile_name, std::string& qxfile_src, std::string& qxfile_exe, std::string& qxfile_make_command) {
+    void get_qx_file_name(
+        std::string& qxfile_name,
+        std::string& qxfile_src,
+        std::string& qxfile_exe,
+        std::string& qxfile_make_command)
+    {
         do {
             std::cout << Colors::WHITE << "\nExecutable name: " << Colors::DEF_COLOR;
             std::getline(std::cin, qxfile_name);
@@ -188,7 +196,6 @@ namespace user_prompt {
             std::cout << '[' << line++ << "]> ";
             std::getline(std::cin, buff);
             if (buff != "") commands.push_back(buff);
-
         } while (buff != "");
     }
 }
