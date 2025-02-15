@@ -60,11 +60,13 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #endif
 
-#define RED         "\033[38;2;255;0;0m"
-#define GREEN       "\033[38;2;0;255;0m"
-#define WHITE       "\033[38;2;255;255;255m"
-#define GREY        "\033[38;2;100;100;100m"
-#define DEF_COLOR   "\033[0m"
+namespace Colors {
+    const char* RED = "\033[38;2;255;0;0m";
+    const char* GREEN = "\033[38;2;0;255;0m";
+    const char* WHITE = "\033[38;2;255;255;255m";
+    const char* GREY = "\033[38;2;100;100;100m";
+    const char* DEF_COLOR = "\033[0m";
+}
 
 
 // -------------------------------------------------------
@@ -78,10 +80,10 @@ const std::string def_qx_make_flags = "-s -O3";
 
 
 inline void print_copyright_notice() {
-    std::cout <<
-        GREY
-        "QX Copyright (C) 2024 Citizen7751\nThis program comes with ABSOLUTELY NO WARRANTY.\n"
-        DEF_COLOR;
+    std::cout
+        << Colors::GREY
+        << "QX Copyright (C) 2024 Citizen7751\nThis program comes with ABSOLUTELY NO WARRANTY.\n"
+        << Colors::DEF_COLOR;
 }
 
 std::string sanitize_str(const std::string& input) {
@@ -104,13 +106,22 @@ namespace file_handling {
     }
 
     void creation_error(const std::string& fname) {
-        std::cout << RED "[Could not create " DEF_COLOR << fname << RED "]" DEF_COLOR "\n";
+        std::cout
+            << Colors::RED << "[Could not create "
+            << Colors::DEF_COLOR
+            << fname
+            << Colors::RED << "]"
+            << Colors::DEF_COLOR  << "\n";
         std::cin.get();
         exit(EXIT_FAILURE);
     }
 
     inline void file_already_exists(const std::string& fname) {
-        std::cout << RED "[" DEF_COLOR << fname << RED " already exists] " GREY "Try again." DEF_COLOR "\n";
+        std::cout
+            << Colors::RED << "[" << Colors::DEF_COLOR
+            << fname
+            << Colors::RED << " already exists] "
+            << Colors::GREY << "Try again." << Colors::DEF_COLOR << "\n";
     }
 }
 
@@ -124,8 +135,10 @@ namespace create_file {
         cmdfile << "// ***** To recompile this ******\n// " << qxfile_make_command << "\n\n";
         cmdfile << "#include <stdio.h>\n#include <stdlib.h>\n\n";
         cmdfile << "void exe_error(const char* command, const int line) {\n";
-        cmdfile << "\tprintf(\"" RED "Error at line [" DEF_COLOR "%d" RED "]: " DEF_COLOR
-            "\\\"%s\\\"" RED " Aborting." DEF_COLOR "\\n\", line, command);\n";
+        cmdfile << "\tprintf(\"" << Colors::RED << "Error at line ["
+                << Colors::DEF_COLOR << "%d"<< Colors::RED << "]: " << Colors::DEF_COLOR
+                << "\\\"%s\\\"" << Colors::RED << " Aborting."
+                << Colors::DEF_COLOR << "\\n\", line, command);\n";
         cmdfile << "\twhile (getchar()!='\\n');\n\texit(1);\n}\n\n";
         cmdfile << "int main(void) {\n\n\n";
         cmdfile << "\tconst char* commands[] = {\n";
@@ -139,7 +152,8 @@ namespace create_file {
         cmdfile << "\tconst int length = sizeof(commands)/sizeof(commands[0]);\n";
         cmdfile << "\tfor (unsigned int i=0; i<length; i++)\n";
         cmdfile << "\t\tif (system(commands[i])) exe_error(commands[i], i+1);\n\n";
-        cmdfile << "\tprintf(\"" GREY "\\n[Process finished - press Enter to exit]" DEF_COLOR "\");\n";
+        cmdfile << "\tprintf(\"" << Colors::GREY << "\\n[Process finished - press Enter to exit]"
+                << Colors::DEF_COLOR << "\");\n";
         cmdfile << "\twhile(getchar()!=\'\\n\');\n\treturn 0;\n}";
         cmdfile.close();
     }
@@ -153,7 +167,7 @@ namespace user_prompt {
 
     void get_qx_file_name(std::string& qxfile_name, std::string& qxfile_src, std::string& qxfile_exe, std::string& qxfile_make_command) {
         do {
-            std::cout << WHITE "\nExecutable name: " DEF_COLOR;
+            std::cout << Colors::WHITE << "\nExecutable name: " << Colors::DEF_COLOR;
             std::getline(std::cin, qxfile_name);
 
             qxfile_src = qxfile_name + ".c";
@@ -167,14 +181,14 @@ namespace user_prompt {
     }
 
     void get_commands(std::vector<std::string>& commands) {
-        std::cout << WHITE "Commands:\n" DEF_COLOR;
+        std::cout << Colors::WHITE << "Commands:\n" << Colors::DEF_COLOR;
         std::string buff;
         unsigned int line = 1;
         do {
-            std::cout << '[' << line << "]> ";
+            std::cout << '[' << line++ << "]> ";
             std::getline(std::cin, buff);
             if (buff != "") commands.push_back(buff);
-            line++;
+
         } while (buff != "");
     }
 }
@@ -196,10 +210,11 @@ int main(void) {
     if (create_file::exe(qxfile_make_command)) file_handling::creation_error(qxfile_exe);
     if (!file_handling::check_file(qxfile_exe)) file_handling::creation_error(qxfile_exe);
 
-    std::cout << GREEN "\n[" DEF_COLOR << qxfile_src
-              << GREEN " and " DEF_COLOR << qxfile_exe
-              << GREEN " are successfully created]" GREY
-              "\n[Press Enter to exit]" DEF_COLOR "\n";
+    std::cout
+        << Colors::GREEN << "\n[" << Colors::DEF_COLOR << qxfile_src
+        << Colors::GREEN << " and " << Colors::DEF_COLOR << qxfile_exe
+        << Colors::GREEN <<" are successfully created]" << Colors::GREY
+        << "\n[Press Enter to exit]" << Colors::DEF_COLOR << "\n";
 
     std::cin.get();
     ANSI_SEQ_OFF;
