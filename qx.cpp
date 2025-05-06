@@ -60,14 +60,6 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #endif
 
-namespace Colors {
-    const char* RED = "\033[38;2;255;0;0m";
-    const char* GREEN = "\033[38;2;0;255;0m";
-    const char* WHITE = "\033[38;2;255;255;255m";
-    const char* GREY = "\033[38;2;100;100;100m";
-    const char* DEF_COLOR = "\033[0m";
-}
-
 
 // -------------------------------------------------------
 // ------------------ Configurable Part ------------------
@@ -78,6 +70,14 @@ const std::string def_qx_make_flags = "-s -O3";
 // -------------------------------------------------------
 // -------------------------------------------------------
 
+
+namespace Colors {
+    const char* RED = "\033[38;2;255;0;0m";
+    const char* GREEN = "\033[38;2;0;255;0m";
+    const char* WHITE = "\033[38;2;255;255;255m";
+    const char* GREY = "\033[38;2;100;100;100m";
+    const char* DEF_COLOR = "\033[0m";
+}
 
 inline void print_copyright_notice() {
     std::cout
