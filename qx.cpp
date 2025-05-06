@@ -135,29 +135,29 @@ namespace create_file {
         std::ofstream cmdfile(qxfile_src);
         if (!cmdfile.is_open()) file_handling::creation_error(qxfile_src);
         
-        cmdfile << "// ***** To recompile this ******\n// " << qxfile_make_command << "\n\n";
-        cmdfile << "#include <stdio.h>\n#include <stdlib.h>\n\n";
-        cmdfile << "void exe_error(const char* command, const int line) {\n";
-        cmdfile << "\tprintf(\"" << Colors::RED << "Error at line ["
+        cmdfile << "// ***** To recompile this ******\n// "
+                << qxfile_make_command << "\n\n"
+                << "#include <stdio.h>\n#include <stdlib.h>\n\n"
+                << "void exe_error(const char* command, const int line) {\n"
+                << "\tprintf(\"" << Colors::RED << "Error at line ["
                 << Colors::DEF_COLOR << "%d"<< Colors::RED << "]: " << Colors::DEF_COLOR
                 << "\\\"%s\\\"" << Colors::RED << " Aborting."
-                << Colors::DEF_COLOR << "\\n\", line, command);\n";
-        cmdfile << "\twhile (getchar()!='\\n');\n\texit(1);\n}\n\n";
-        cmdfile << "int main(void) {\n\n\n";
-        cmdfile << "\tconst char* commands[] = {\n";
+                << Colors::DEF_COLOR << "\\n\", line, command);\n"
+                << "\twhile (getchar()!='\\n');\n\texit(1);\n}\n\n"
+                << "int main(void) {\n\n\n"
+                << "\tconst char* commands[] = {\n";
         
         for (auto line : exe_commands) {
             line = sanitize_str(line);
             cmdfile << "\t\t\"" << line << "\",\n";
         }
 
-        cmdfile << "\t};\n\n\n";
-        cmdfile << "\tconst int length = sizeof(commands)/sizeof(commands[0]);\n";
-        cmdfile << "\tfor (unsigned int i=0; i<length; i++)\n";
-        cmdfile << "\t\tif (system(commands[i])) exe_error(commands[i], i+1);\n\n";
-        cmdfile << "\tprintf(\"" << Colors::GREY << "\\n[Process finished - press Enter to exit]"
-                << Colors::DEF_COLOR << "\");\n";
-        cmdfile << "\twhile(getchar()!=\'\\n\');\n\treturn 0;\n}";
+        cmdfile << "\t};\n\n\n\tconst int length = sizeof(commands)/sizeof(commands[0]);\n"
+                << "\tfor (unsigned int i=0; i<length; i++)\n"
+                << "\t\tif (system(commands[i])) exe_error(commands[i], i+1);\n\n"
+                << "\tprintf(\"" << Colors::GREY << "\\n[Process finished - press Enter to exit]"
+                << Colors::DEF_COLOR << "\");\n"
+                << "\twhile(getchar()!=\'\\n\');\n\treturn 0;\n}";
         cmdfile.close();
     }
 
