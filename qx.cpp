@@ -1,7 +1,7 @@
 /*
 -------------------------- License - GPLv3 ------------------------------
 QX - Quick Execution
-Copyright (C) 2024 Citizen7751
+Copyright (C) 2024- Citizen7751
 
 <https://github.com/Citizen7751/qx>
 
@@ -72,10 +72,10 @@ const std::string def_qx_make_flags = "-s -O3";
 
 
 namespace Colors {
-    const char* RED = "\033[38;2;255;0;0m";
-    const char* GREEN = "\033[38;2;0;255;0m";
-    const char* WHITE = "\033[38;2;255;255;255m";
-    const char* GREY = "\033[38;2;100;100;100m";
+    const char* RED =       "\033[38;2;255;0;0m";
+    const char* GREEN =     "\033[38;2;0;255;0m";
+    const char* WHITE =     "\033[38;2;255;255;255m";
+    const char* GREY =      "\033[38;2;100;100;100m";
     const char* DEF_COLOR = "\033[0m";
 }
 
@@ -88,18 +88,20 @@ inline void print_copyright_notice() {
 
 std::string sanitize_str(const std::string& input) {
     std::string cleanstr;
-    for (auto c : input) {
-        if (c == '\\' || c == '\"')
+
+    for (size_t i = 0; i < input.length(); i++) {
+        if (input[i] == '\\' || input[i] == '\"')
           cleanstr += '\\';
-        cleanstr += c;
+        cleanstr += input[i];
     }
+        
     return cleanstr;
 }
 
 namespace file_handling {
 
     bool check_file(const std::string& fname) {
-        std::ifstream f(fname);
+        std::ifstream f(fname.c_str());
         bool success = f.good();
         f.close();
         return success;
@@ -127,12 +129,12 @@ namespace file_handling {
 
 namespace create_file {
 
-    void src(
-        const std::string& qxfile_src,
-        const std::string& qxfile_make_command,
-        std::vector<std::string>& exe_commands)
+    void src(const std::string& qxfile_src,
+             const std::string& qxfile_make_command,
+             std::vector<std::string>& exe_commands)
     {
-        std::ofstream cmdfile(qxfile_src);
+        std::ofstream cmdfile(qxfile_src.c_str());
+        
         if (!cmdfile.is_open()) file_handling::creation_error(qxfile_src);
         
         cmdfile << "// ***** To recompile this ******\n// "
@@ -147,11 +149,11 @@ namespace create_file {
                 << "int main(void) {\n\n\n"
                 << "\tconst char* commands[] = {\n";
         
-        for (auto line : exe_commands) {
-            line = sanitize_str(line);
-            cmdfile << "\t\t\"" << line << "\",\n";
+        for (size_t i = 0; i < exe_commands.size(); i++) {
+            exe_commands[i] = sanitize_str(exe_commands[i]);
+            cmdfile << "\t\t\"" << exe_commands[i] << "\",\n";
         }
-
+        
         cmdfile << "\t};\n\n\n\tconst int length = sizeof(commands)/sizeof(commands[0]);\n"
                 << "\tfor (unsigned int i=0; i<length; i++)\n"
                 << "\t\tif (system(commands[i])) exe_error(commands[i], i+1);\n\n"
