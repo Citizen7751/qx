@@ -72,17 +72,18 @@ const std::string def_qx_make_flags = "-s -O3";
 
 
 namespace Colors {
-    const char* RED =       "\033[38;2;255;0;0m";
-    const char* GREEN =     "\033[38;2;0;255;0m";
-    const char* WHITE =     "\033[38;2;255;255;255m";
-    const char* GREY =      "\033[38;2;100;100;100m";
+    const char* RED =       "\033[31m";
+    const char* GREEN =     "\033[32m";
+    const char* WHITE =     "\033[37m";
+    const char* CYAN =      "\033[36m";
     const char* DEF_COLOR = "\033[0m";
 }
 
 inline void print_copyright_notice() {
     std::cout
-        << Colors::GREY
-        << "QX Copyright (C) 2024 Citizen7751\nThis program comes with ABSOLUTELY NO WARRANTY.\n"
+        << Colors::CYAN
+        << "QX Copyright (C) 2024 Citizen7751\n"
+        "This program comes with ABSOLUTELY NO WARRANTY.\n"
         << Colors::DEF_COLOR;
 }
 
@@ -94,7 +95,7 @@ std::string sanitize_str(const std::string& input) {
           cleanstr += '\\';
         cleanstr += input[i];
     }
-        
+
     return cleanstr;
 }
 
@@ -123,7 +124,7 @@ namespace file_handling {
             << Colors::RED << "[" << Colors::DEF_COLOR
             << fname
             << Colors::RED << " already exists] "
-            << Colors::GREY << "Try again." << Colors::DEF_COLOR << "\n";
+            << Colors::DEF_COLOR << "Try again.\n";
     }
 }
 
@@ -131,35 +132,40 @@ namespace create_file {
 
     void src(const std::string& qxfile_src,
              const std::string& qxfile_make_command,
+             const std::string& qxfile_exe,
              std::vector<std::string>& exe_commands)
     {
         std::ofstream cmdfile(qxfile_src.c_str());
-        
-        if (!cmdfile.is_open()) file_handling::creation_error(qxfile_src);
-        
-        cmdfile << "// ***** To recompile this ******\n// "
-                << qxfile_make_command << "\n\n"
-                << "#include <stdio.h>\n#include <stdlib.h>\n\n"
-                << "void exe_error(const char* command, const int line) {\n"
-                << "\tprintf(\"" << Colors::RED << "Error at line ["
-                << Colors::DEF_COLOR << "%d"<< Colors::RED << "]: " << Colors::DEF_COLOR
-                << "\\\"%s\\\"" << Colors::RED << " Aborting."
-                << Colors::DEF_COLOR << "\\n\", line, command);\n"
-                << "\twhile (getchar()!='\\n');\n\texit(1);\n}\n\n"
-                << "int main(void) {\n\n\n"
-                << "\tconst char* commands[] = {\n";
-        
+
+        if (!cmdfile.is_open())
+            file_handling::creation_error(qxfile_src);
+
+        cmdfile
+            << "/* ***** To recompile ***** */\n/* "
+            << qxfile_make_command <<
+            " */\n\n#include <stdio.h>\n#include <stdlib.h>\n\n"
+            "void exe_error(const char* command, const unsigned int line) {\n"
+            "\tprintf(\"" << Colors::RED << "Error at line ["
+            << Colors::DEF_COLOR << "%u" << Colors::RED << "]: "
+            << Colors::DEF_COLOR << "\\\"%s\\\"" << Colors::RED <<
+            " Aborting." << Colors::DEF_COLOR << "\\n\", line, command);\n"
+            "\twhile (getchar()!='\\n');\n\texit(1);\n}\n\nint main(void) "
+            "{\n\n\n\tconst char* commands[] = {\n";
+
         for (size_t i = 0; i < exe_commands.size(); i++) {
             exe_commands[i] = sanitize_str(exe_commands[i]);
             cmdfile << "\t\t\"" << exe_commands[i] << "\",\n";
         }
-        
-        cmdfile << "\t};\n\n\n\tconst int length = sizeof(commands)/sizeof(commands[0]);\n"
-                << "\tfor (unsigned int i=0; i<length; i++)\n"
-                << "\t\tif (system(commands[i])) exe_error(commands[i], i+1);\n\n"
-                << "\tprintf(\"" << Colors::GREY << "\\n[Process finished - press Enter to exit]"
-                << Colors::DEF_COLOR << "\");\n"
-                << "\twhile(getchar()!=\'\\n\');\n\treturn 0;\n}";
+
+        cmdfile
+            << "\t};\n\n\n\tconst unsigned int length = "
+            "sizeof(commands)/sizeof(commands[0]);\n"
+            "\tunsigned int i = 0;\n\tfor (; i < length; i++)\n"
+            "\t\tif (system(commands[i])) exe_error(commands[i], i + 1);\n\n"
+            "\tprintf(\"" << Colors::GREEN << "\\n["
+            << Colors::DEF_COLOR << qxfile_exe << Colors::GREEN <<
+            " finished - press Enter to exit]" << Colors::DEF_COLOR <<
+            "\");\n\twhile(getchar()!=\'\\n\');\n\treturn 0;\n}";
         cmdfile.close();
     }
 
@@ -177,17 +183,30 @@ namespace user_prompt {
         std::string& qxfile_make_command)
     {
         do {
-            std::cout << Colors::WHITE << "\nExecutable name: " << Colors::DEF_COLOR;
+            std::cout
+                << Colors::WHITE
+                << "\nExecutable name: "
+                << Colors::DEF_COLOR;
+
             std::getline(std::cin, qxfile_name);
 
             qxfile_src = qxfile_name + ".c";
             qxfile_exe = qxfile_name + EXT;
-            qxfile_make_command = def_qx_cc + " " + def_qx_ofile_flag + " " + qxfile_exe + " " + qxfile_src + " " + def_qx_make_flags;
+            qxfile_make_command =
+                def_qx_cc + " " +
+                def_qx_ofile_flag + " " +
+                qxfile_exe + " " +
+                qxfile_src + " " +
+                def_qx_make_flags;
 
-            if (file_handling::check_file(qxfile_src)) file_handling::file_already_exists(qxfile_src);
-            if (file_handling::check_file(qxfile_exe)) file_handling::file_already_exists(qxfile_exe);
+            if (file_handling::check_file(qxfile_src))
+                file_handling::file_already_exists(qxfile_src);
 
-        } while (file_handling::check_file(qxfile_src) || file_handling::check_file(qxfile_exe));
+            if (file_handling::check_file(qxfile_exe))
+                file_handling::file_already_exists(qxfile_exe);
+
+        } while (file_handling::check_file(qxfile_src) ||
+                 file_handling::check_file(qxfile_exe));
     }
 
     void get_commands(std::vector<std::string>& commands) {
@@ -207,23 +226,38 @@ int main(void) {
     ANSI_SEQ_ON;
     print_copyright_notice();
 
-    std::string qxfile_name, qxfile_src, qxfile_exe, qxfile_make_command;
+    std::string qxfile_name;
+    std::string qxfile_src;
+    std::string qxfile_exe;
+    std::string qxfile_make_command;
     std::vector<std::string> exe_commands;
 
-    user_prompt::get_qx_file_name(qxfile_name, qxfile_src, qxfile_exe, qxfile_make_command);
+    user_prompt::get_qx_file_name(qxfile_name,
+                                  qxfile_src,
+                                  qxfile_exe,
+                                  qxfile_make_command);
+
     user_prompt::get_commands(exe_commands);
 
-    create_file::src(qxfile_src, qxfile_make_command, exe_commands);
-    if (!file_handling::check_file(qxfile_src)) file_handling::creation_error(qxfile_src);
+    create_file::src(qxfile_src,
+                     qxfile_make_command,
+                     qxfile_exe,
+                     exe_commands);
 
-    if (create_file::exe(qxfile_make_command)) file_handling::creation_error(qxfile_exe);
-    if (!file_handling::check_file(qxfile_exe)) file_handling::creation_error(qxfile_exe);
+    if (!file_handling::check_file(qxfile_src))
+        file_handling::creation_error(qxfile_src);
+
+    if (create_file::exe(qxfile_make_command))
+        file_handling::creation_error(qxfile_exe);
+
+    if (!file_handling::check_file(qxfile_exe))
+        file_handling::creation_error(qxfile_exe);
 
     std::cout
         << Colors::GREEN << "\n[" << Colors::DEF_COLOR << qxfile_src
         << Colors::GREEN << " and " << Colors::DEF_COLOR << qxfile_exe
-        << Colors::GREEN <<" are successfully created]" << Colors::GREY
-        << "\n[Press Enter to exit]" << Colors::DEF_COLOR << "\n";
+        << Colors::GREEN << " are successfully created]" << Colors::DEF_COLOR
+        << "\n[Press Enter to exit]\n";
 
     std::cin.get();
     ANSI_SEQ_OFF;
