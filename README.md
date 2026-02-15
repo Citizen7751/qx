@@ -1,3 +1,12 @@
+**Announcement**
+
+QX is going to go though huge changes in the future and will become completely different!\
+It is planned to be rewritten in plain C and will have no colors - both for wider compatibility across operating systems, environments and compilers. It will also have the ability to both compile and directly interpret input files.\
+Once the program is done and uploaded, I currently plan to remove the .cpp version.
+
+
+---
+
 # Quick Execution
 
 It's a simple tool that turns system commands into clickable shortcuts and thus makes execution easier.
